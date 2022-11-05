@@ -4,6 +4,7 @@ import styles from "../styles/Home.module.css";
 
 import { useState } from "react";
 import Map from "../components/Map";
+import StoryImages from "../components/StoryImages";
 
 import chapterData from "../public/data/mapChapters.json";
 
@@ -40,6 +41,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <Map chapter={chapter} />
+        <StoryImages chapter={chapter} />
 
         <nav id="navigation">
           <div onClick={previousChapter}>BACK</div>

@@ -237,7 +237,9 @@ export default function Map({ chapter }) {
       transitions: {
         opacity: {
           duration: fadeTransDuration,
-          enter: (value) => [value[0], value[1], value[2], 0], // fade in
+          enter: (value) => {
+            return [value[0], value[1], value[2], 0];
+          }, // fade in
         },
       },
     }),
