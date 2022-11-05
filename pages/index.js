@@ -5,16 +5,26 @@ import styles from "../styles/Home.module.css";
 import { useState } from "react";
 import Map from "../components/Map";
 
+import chapterData from "../public/data/mapChapters.json";
+
 export default function Home() {
   const [chapter, setChapter] = useState(0);
 
   // create a function to add +1 to chapter on click
   const nextChapter = () => {
-    setChapter(chapter + 1);
+    if (chapter < chapterData.length - 1) {
+      setChapter(chapter + 1);
+    } else {
+      setChapter(0);
+    }
   };
 
   const previousChapter = () => {
-    setChapter(chapter - 1);
+    if (chapter > 0) {
+      setChapter(chapter - 1);
+    } else {
+      setChapter(chapterData.length - 1);
+    }
   };
 
   return (
