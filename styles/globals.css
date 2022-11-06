@@ -1,14 +1,13 @@
 /* fonts */
-
 /* @font-face {
   font-family: SpeziaWide;
   src: url(/public/fonts/SpeziaWide-Bold.otf);
-}
+} */
 
 @font-face {
-  font-family: SpeziaThin;
+  font-family: SpeziaWide;
   src: url(/public/fonts/SpeziaCompleteUprightTrial.woff);
-} */
+}
 
 @keyframes typewriter {
   from {
@@ -98,7 +97,7 @@ a {
 }
 
 #narrativeText {
-  font-family: SpeziaWide;
+  /* font-family: SpeziaWide; */
   font-size: 3.25rem;
   line-height: 3.25rem;
   color: white;
@@ -124,7 +123,7 @@ a {
 }
 
 #subText {
-  font-family: SpeziaWide;
+  /* font-family: SpeziaWide; */
   font-size: 1rem;
   line-height: 1.4rem;
   padding-top: 0.25rem;
@@ -134,7 +133,7 @@ a {
 }
 
 #description {
-  font-family: SpeziaWide;
+  /* font-family: SpeziaWide; */
   color: white;
   transition: 0.25s ease-in-out;
 }
@@ -152,7 +151,6 @@ a {
 #background-halo > * {
   width: 35vw;
   height: 35vw;
-
   /* background: radial-gradient(#e66465, #9198e5); */
   /* background: radial-gradient(#000000, #e66465); */
   background: radial-gradient(#000000, #9198e5);
