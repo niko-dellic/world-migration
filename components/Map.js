@@ -86,300 +86,196 @@ export default function Map({ chapter }) {
   //   }, [groups]);
   //   const timeRange = [currentTime, currentTime + TIME_WINDOW];
 
-  const [layers, setLayers] = useState([
+  const layers = [
     new BitmapLayer({
-      id: "bitmap-layer",
-      image: DATA_URL.IMAGE.WORLD,
+      id: "SaTile",
+      image: DATA_URL.IMAGE.SOUTHAMERICA,
       bounds: [
-        [-180, -90, -35000],
-        [-180, 90, -35000],
-        [180, 90, -35000],
-        [180, -90, -35000],
+        [-125.704377, -58.123691],
+        [-125.704377, 37.286326],
+        [-30.290414, 37.286326],
+        [-30.290414, -58.123691],
       ],
-      opacity: chapterData[chapter].layers.worldTile,
+      opacity: chapterData[chapter].layers.SaTile,
       transitions: {
         opacity: {
-          duration: 2500,
+          duration: 2000,
           enter: (value) => [value[0], value[1], value[2], 0], // fade in
         },
       },
     }),
-  ]);
+    new PathLayer({
+      id: "PanamPath",
+      data: DATA_URL.DATA.PATH_COST,
+      widthScale: 2,
+      widthMinPixels: 2,
+      getPath: (d) => d.path,
+      getColor: [255, 255, 255, 255],
+      getDashArray: [4, 5],
+      dashJustified: false,
+      extensions: [new PathStyleExtension({ highPrecisionDash: true })],
+      opacity: chapterData[chapter].layers.PanamPath,
+      transitions: {
+        opacity: {
+          duration: fadeTransDuration,
+          enter: (value) => [value[0], value[1], value[2], 0], // fade in
+        },
+      },
+    }),
+    new BitmapLayer({
+      id: "PanamaImg",
+      image: DATA_URL.IMAGE.PANAMA,
+      bounds: [
+        [-84.071066, 6.204412],
+        [-84.071066, 10.942168],
+        [-75.646334, 10.942168],
+        [-75.646334, 6.204412],
+      ],
+      opacity: chapterData[chapter].layers.PanamaImg,
+      parameters: {
+        depthTest: false,
+      },
+      transitions: {
+        opacity: {
+          duration: fadeTransDuration,
+          enter: (value) => [value[0], value[1], value[2], 0], // fade in
+        },
+      },
+    }),
+    new BitmapLayer({
+      id: "DarienImg",
+      image: DATA_URL.IMAGE.DARIEN,
+      bounds: [
+        [-77.664696, 8.078343],
+        [-77.664696, 8.789628],
+        [-76.383324, 8.789628],
+        [-76.383324, 8.078343],
+      ],
+      opacity: chapterData[chapter].layers.DarienImg,
+      parameters: {
+        depthTest: false,
+      },
+      transitions: {
+        opacity: {
+          duration: fadeTransDuration,
+          enter: (value) => [value[0], value[1], value[2], 0], // fade in
+        },
+      },
+    }),
+    new BitmapLayer({
+      id: "GuatMexImg",
+      image: DATA_URL.IMAGE.GUATMEX,
+      bounds: [
+        [-92.168185, 14.663715],
+        [-92.168185, 14.692483],
+        [-92.116985, 14.692483],
+        [-92.116985, 14.663715],
+      ],
+      opacity: chapterData[chapter].layers.GuatMexImg,
+      parameters: {
+        depthTest: false,
+      },
+      transitions: {
+        opacity: {
+          duration: fadeTransDuration,
+          enter: (value) => [value[0], value[1], value[2], 0], // fade in
+        },
+      },
+    }),
+    new PathLayer({
+      id: "Highway",
+      data: DATA_URL.DATA.HIGHWAY,
+      widthScale: 3,
+      widthMinPixels: 2,
+      getPath: (d) => d.path,
+      getColor: [155, 155, 155, 255],
+      opacity: chapterData[chapter].layers.Highway,
+      transitions: {
+        opacity: {
+          duration: fadeTransDuration,
+          enter: (value) => [value[0], value[1], value[2], 0], // fade in
+        },
+      },
+    }),
+    new TextLayer({
+      id: "Countries",
+      data: DATA_URL.TEXT.COUNTRY,
 
-  //   add layers on chapter change
-  useEffect(() => {
-    const incomingLayerNames = [];
-    for (const [key, value] of Object.entries(loadLayerOrder)) {
-      if (value == chapter) {
-        incomingLayerNames.push(key);
-      }
-    }
+      pickable: false,
+      getPosition: (d) => [d.lon1, d.lat1],
+      getText: (d) => d.Nationality.toUpperCase(),
+      getSize: 11,
+      getColor: [180, 235, 190],
+      getAngle: 180,
+      getPixelOffset: [-5, -1],
+      fontWeight: "bold",
+      getTextAnchor: "end",
+      getAlignmentBaseline: "bottom",
+      billboard: false,
+      opacity: chapterData[chapter].layers.Countries,
+      transitions: {
+        opacity: {
+          duration: fadeTransDuration,
+          enter: (value) => [value[0], value[1], value[2], 0], // fade in
+        },
+      },
+    }),
+    new TextLayer({
+      id: "CostPath",
+      data: DATA_URL.TEXT.COST,
 
-    // add layers to the map if not added already
-    const currentLayers = layers.map((layer) => layer.id);
-    const layersToAdd = [];
+      pickable: false,
+      getPosition: (d) => [d.x, d.y],
+      getText: (d) => (d.Acum_Cost_ !== 0 ? d.Accum_cost : null),
+      getSize: 15,
 
-    if (
-      incomingLayerNames.includes("SaTile") &&
-      !currentLayers.includes("SaTile")
-    ) {
-      layersToAdd.push(
-        new BitmapLayer({
-          id: "SaTile",
-          image: DATA_URL.IMAGE.SOUTHAMERICA,
-          bounds: [
-            [-125.704377, -58.123691],
-            [-125.704377, 37.286326],
-            [-30.290414, 37.286326],
-            [-30.290414, -58.123691],
-          ],
-          opacity: chapterData[chapter].layers.SaTile,
-          transitions: {
-            opacity: {
-              duration: 2000,
-              enter: (value) => [value[0], value[1], value[2], 0], // fade in
-            },
-          },
-        })
-      );
-    }
-
-    if (
-      incomingLayerNames.includes("PanamPath") &&
-      !currentLayers.includes("PanamPath")
-    ) {
-      layersToAdd.push(
-        new PathLayer({
-          id: "PanamPath",
-          data: DATA_URL.DATA.PATH_COST,
-          widthScale: 2,
-          widthMinPixels: 2,
-          getPath: (d) => d.path,
-          getColor: [255, 255, 255, 255],
-          getDashArray: [4, 5],
-          dashJustified: false,
-          extensions: [new PathStyleExtension({ highPrecisionDash: true })],
-          opacity: chapterData[chapter].layers.PanamPath,
-          transitions: {
-            opacity: {
-              duration: fadeTransDuration,
-              enter: (value) => [value[0], value[1], value[2], 0], // fade in
-            },
-          },
-        })
-      );
-    }
-
-    if (
-      incomingLayerNames.includes("PanamaImg") &&
-      !currentLayers.includes("PanamaImg")
-    ) {
-      layersToAdd.push(
-        new BitmapLayer({
-          id: "PanamaImg",
-          image: DATA_URL.IMAGE.PANAMA,
-          bounds: [
-            [-84.071066, 6.204412],
-            [-84.071066, 10.942168],
-            [-75.646334, 10.942168],
-            [-75.646334, 6.204412],
-          ],
-          opacity: chapterData[chapter].layers.PanamaImg,
-          parameters: {
-            depthTest: false,
-          },
-          transitions: {
-            opacity: {
-              duration: fadeTransDuration,
-              enter: (value) => [value[0], value[1], value[2], 0], // fade in
-            },
-          },
-        })
-      );
-    }
-
-    if (
-      incomingLayerNames.includes("DarienImg") &&
-      !currentLayers.includes("DarienImg")
-    ) {
-      layersToAdd.push(
-        new BitmapLayer({
-          id: "DarienImg",
-          image: DATA_URL.IMAGE.DARIEN,
-          bounds: [
-            [-77.664696, 8.078343],
-            [-77.664696, 8.789628],
-            [-76.383324, 8.789628],
-            [-76.383324, 8.078343],
-          ],
-          opacity: chapterData[chapter].layers.DarienImg,
-          parameters: {
-            depthTest: false,
-          },
-          transitions: {
-            opacity: {
-              duration: fadeTransDuration,
-              enter: (value) => [value[0], value[1], value[2], 0], // fade in
-            },
-          },
-        })
-      );
-    }
-    if (
-      incomingLayerNames.includes("GuatMexImg") &&
-      !currentLayers.includes("GuatMexImg")
-    ) {
-      layersToAdd.push(
-        new BitmapLayer({
-          id: "GuatMexImg",
-          image: DATA_URL.IMAGE.GUATMEX,
-          bounds: [
-            [-92.168185, 14.663715],
-            [-92.168185, 14.692483],
-            [-92.116985, 14.692483],
-            [-92.116985, 14.663715],
-          ],
-          opacity: chapterData[chapter].layers.GuatMexImg,
-          parameters: {
-            depthTest: false,
-          },
-          transitions: {
-            opacity: {
-              duration: fadeTransDuration,
-              enter: (value) => [value[0], value[1], value[2], 0], // fade in
-            },
-          },
-        })
-      );
-    }
-
-    if (
-      incomingLayerNames.includes("Highway") &&
-      !currentLayers.includes("Highway")
-    ) {
-      layersToAdd.push(
-        new PathLayer({
-          id: "Highway",
-          data: DATA_URL.DATA.HIGHWAY,
-          widthScale: 3,
-          widthMinPixels: 2,
-          getPath: (d) => d.path,
-          getColor: [155, 155, 155, 255],
-          opacity: chapterData[chapter].layers.Highway,
-          transitions: {
-            opacity: {
-              duration: fadeTransDuration,
-              enter: (value) => [value[0], value[1], value[2], 0], // fade in
-            },
-          },
-        })
-      );
-    }
-
-    if (
-      incomingLayerNames.includes("Countries") &&
-      !currentLayers.includes("Countries")
-    ) {
-      layersToAdd.push(
-        new TextLayer({
-          id: "Countries",
-          data: DATA_URL.TEXT.COUNTRY,
-          fontFamily: "SpeziaWide",
-          pickable: false,
-          getPosition: (d) => [d.lon1, d.lat1],
-          getText: (d) => d.Nationality.toUpperCase(),
-          getSize: 11,
-          getColor: [180, 235, 190],
-          getAngle: 180,
-          getPixelOffset: [-5, -1],
-          fontWeight: "bold",
-          getTextAnchor: "end",
-          getAlignmentBaseline: "bottom",
-          billboard: false,
-          opacity: chapterData[chapter].layers.Countries,
-          transitions: {
-            opacity: {
-              duration: fadeTransDuration,
-              enter: (value) => [value[0], value[1], value[2], 0], // fade in
-            },
-          },
-        })
-      );
-    }
-
-    if (
-      incomingLayerNames.includes("CostPath") &&
-      !currentLayers.includes("CostPath")
-    ) {
-      layersToAdd.push(
-        new TextLayer({
-          id: "CostPath",
-          data: DATA_URL.TEXT.COST,
-          fontFamily: "SpeziaWide",
-          pickable: false,
-          getPosition: (d) => [d.x, d.y],
-          getText: (d) => (d.Acum_Cost_ !== 0 ? d.Accum_cost : null),
-          getSize: 15,
-
-          getColor: [255, 255, 255],
-          getPixelOffset: [-5, -1],
-          fontWeight: "bold",
-          getTextAnchor: "end",
-          getAlignmentBaseline: "bottom",
-          billboard: true,
-          parameters: {
-            depthTest: false,
-          },
-          opacity: chapterData[chapter].layers.CostPath,
-          transitions: {
-            opacity: {
-              duration: fadeTransDuration,
-              enter: (value) => {
-                return [value[0], value[1], value[2], 0];
-              }, // fade in
-            },
-          },
-        })
-      );
-    }
-
-    if (
-      incomingLayerNames.includes("Trips") &&
-      !currentLayers.includes("Trips")
-    ) {
-      layersToAdd.push(
-        new TripsLayer({
-          id: "Trips",
-          data: DATA_URL.DATA.TRIPS,
-          getPath: (d) => d.path,
-          getTimestamps: (d) => d.timestamps,
-          getColor: [215, 215, 0],
-          opacity: 1,
-          widthMinPixels: 8,
-          // widthMaxPixels:3,
-          capRounded: true,
-          jointRounded: true,
-          trailLength: 50,
-          currentTime: time,
-          shadowEnabled: false,
-          fadeTrail: true,
-          visible: chapterData[chapter].layers.Trips,
-          //   opacity: chapterData[chapter].layers.Trips,
-          parameters: {
-            depthTest: false,
-          },
-          transitions: {
-            opacity: {
-              duration: fadeTransDuration,
-              enter: (value) => [value[0], value[1], value[2], 0], // fade in
-            },
-          },
-        })
-      );
-    }
-
-    setLayers([...new Set(layers), ...layersToAdd]);
-  }, [chapter]);
+      getColor: [255, 255, 255],
+      getPixelOffset: [-5, -1],
+      fontWeight: "bold",
+      getTextAnchor: "end",
+      getAlignmentBaseline: "bottom",
+      billboard: true,
+      parameters: {
+        depthTest: false,
+      },
+      opacity: chapterData[chapter].layers.CostPath,
+      transitions: {
+        opacity: {
+          duration: fadeTransDuration,
+          enter: (value) => {
+            return [value[0], value[1], value[2], 0];
+          }, // fade in
+        },
+      },
+    }),
+    new TripsLayer({
+      id: "Trips",
+      data: DATA_URL.DATA.TRIPS,
+      getPath: (d) => d.path,
+      getTimestamps: (d) => d.timestamps,
+      getColor: [215, 215, 0],
+      opacity: 1,
+      widthMinPixels: 8,
+      // widthMaxPixels:3,
+      capRounded: true,
+      jointRounded: true,
+      trailLength: 50,
+      currentTime: time,
+      shadowEnabled: false,
+      fadeTrail: true,
+      visible: chapterData[chapter].layers.Trips,
+      //   opacity: chapterData[chapter].layers.Trips,
+      parameters: {
+        depthTest: false,
+      },
+      transitions: {
+        opacity: {
+          duration: fadeTransDuration,
+          enter: (value) => [value[0], value[1], value[2], 0], // fade in
+        },
+      },
+    }),
+  ];
 
   //   const dataLayers = groups.map(
   //     (group, index) =>

@@ -80,13 +80,12 @@ a {
 
 #narrativeContainer {
   position: fixed;
-  margin-left: 5%;
-  width: 20%;
-  z-index: 1;
+  top: 50%;
+  left: 5%;
+  width: fit-content;
+  z-index: 3;
   place-self: start;
-
-  /* border: 1px solid white; */
-  /* height: 100vh; */
+  transition: opacity 0.5s ease-in-out;
 }
 
 #narrativeContainer > * {

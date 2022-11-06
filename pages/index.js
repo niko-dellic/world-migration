@@ -8,6 +8,9 @@ import { useState } from "react";
 // import Map from "../components/Map";
 
 import chapterData from "../public/data/mapChapters.json";
+import { useEffect } from "react";
+
+import StoryText from "../components/StoryText";
 
 const DynamicMap = dynamic(() => import("../components/Map"), {
   suspense: true,
@@ -18,6 +21,11 @@ const DynamicStoryImages = dynamic(() => import("../components/StoryImages"), {
 
 export default function Home() {
   const [chapter, setChapter] = useState(0);
+
+  // console log chapter on useEffect
+  useEffect(() => {
+    console.log(chapter);
+  }, [chapter]);
 
   // create a function to add +1 to chapter on click
   const nextChapter = () => {
@@ -48,15 +56,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <div id="narrativeImg"></div>
-        <div id="narrativeContainer">
-          <span id="narrativeText">DISTANCE UNKNOWN</span>
-          <span id="flare">|</span>
-          <div id="subText">
-            RISKS AND OPPORTUNITIES OF MIGRATION IN THE AMERICAS
-          </div>
-          <div id="description"></div>
-        </div>
+        <StoryText chapter={chapter} />
         <Suspense fallback={"Loading..."}>
           <DynamicMap chapter={chapter} />
           <DynamicStoryImages chapter={chapter} />

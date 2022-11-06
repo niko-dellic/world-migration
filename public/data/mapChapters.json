@@ -139,7 +139,7 @@
     "layers": {
       "basemap": 0,
       "worldTile": 1,
-      "SaTile": 0,
+      "SaTile": 1,
       "DarienImg": 0,
       "PanamaImg": 0,
       "GuatMexImg": 0,
