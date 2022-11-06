@@ -83,7 +83,7 @@ a {
   position: fixed;
   top: 50%;
   left: 5%;
-  width: fit-content;
+  width: 30ch;
   z-index: 3;
   place-self: start;
   transition: opacity 0.5s ease-in-out;

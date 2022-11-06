@@ -28,7 +28,7 @@ export default function StoryText({ chapter }) {
           <Typewriter
             options={{
               strings: [
-                `<span id="narrativeText">DISTANCE UNKOWN</span><div id="subText">RISKS AND OPPORTUNITIES OF MIGRATION IN THE AMERICAS</div>`,
+                `<span id="narrativeText">DISTANCE<br />UNKOWN</span><div id="subText">RISKS AND OPPORTUNITIES OF MIGRATION IN THE AMERICAS</div>`,
               ],
               autoStart: true,
               loop: true,

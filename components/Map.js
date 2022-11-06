@@ -1,5 +1,5 @@
 import DeckGL from "@deck.gl/react";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { TextLayer, PathLayer, BitmapLayer } from "@deck.gl/layers";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import { _GlobeView as GlobeView } from "@deck.gl/core";
@@ -8,6 +8,20 @@ import { PathStyleExtension } from "@deck.gl/extensions";
 import AnimatedArcLayer from "./animated-arc-layer";
 import chapterData from "../public/data/mapChapters.json";
 import animatedFlights from "../public/data/animatedFlights.json";
+import { colorHalftone, dotScreen } from "@luma.gl/shadertools";
+import { PostProcessEffect } from "@deck.gl/core";
+
+// halftone post effect
+const postProcessEffect = new PostProcessEffect(colorHalftone, {
+  center: [0.5, 0.5],
+  size: 2,
+});
+
+// dot screen post effect
+// const postProcessEffect = new PostProcessEffect(dotScreen, {
+//   center: [0.5, 0.5],
+//   size: 3,
+// });
 
 // static variables
 let fadeTransDuration = 1500; //the fade duration in millaseconds for each layer
@@ -109,6 +123,40 @@ export default function Map({ chapter, setChapter }) {
   }, [chapter]);
 
   const layers = [
+    new BitmapLayer({
+      id: "BitmapLayer",
+      image: DATA_URL.IMAGE.WORLD,
+      bounds: [
+        [-180, -90, -35000],
+        [-180, 90, -35000],
+        [180, 90, -35000],
+        [180, -90, -35000],
+      ],
+      opacity: chapterData[chapter].layers.worldTile,
+      transitions: {
+        opacity: {
+          duration: 2500,
+          enter: (value) => [value[0], value[1], value[2], 0], // fade in
+        },
+      },
+    }),
+
+    // new GeoJsonLayer({
+    //   id: "wordMap",
+    //   data: DATA_URL.DATA.WORLDMAP,
+    //   stroked: false,
+    //   filled: true,
+    //   getFillColor: [12, 82, 32, 255],
+    //   //   assign material to layer
+
+    //   transitions: {
+    //     opacity: {
+    //       duration: 2000,
+    //       enter: (value) => [value[0], value[1], value[2], 0], // fade in
+    //     },
+    //   },
+    // }),
+
     new BitmapLayer({
       id: "SaTile",
       image: DATA_URL.IMAGE.SOUTHAMERICA,
@@ -328,6 +376,7 @@ export default function Map({ chapter, setChapter }) {
       controller={true}
       layers={[layers, animatedLayers]}
       views={new GlobeView()}
+      effects={[postProcessEffect]}
     />
   );
 }
