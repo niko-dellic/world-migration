@@ -1,12 +1,20 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
+import { Suspense } from "react";
+import dynamic from "next/dynamic";
 
 import { useState } from "react";
-import Map from "../components/Map";
-import StoryImages from "../components/StoryImages";
+// import Map from "../components/Map";
 
 import chapterData from "../public/data/mapChapters.json";
+
+const DynamicMap = dynamic(() => import("../components/Map"), {
+  suspense: true,
+});
+const DynamicStoryImages = dynamic(() => import("../components/StoryImages"), {
+  suspense: true,
+});
 
 export default function Home() {
   const [chapter, setChapter] = useState(0);
@@ -40,8 +48,19 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <Map chapter={chapter} />
-        <StoryImages chapter={chapter} />
+        <div id="narrativeImg"></div>
+        <div id="narrativeContainer">
+          <span id="narrativeText">DISTANCE UNKNOWN</span>
+          <span id="flare">|</span>
+          <div id="subText">
+            RISKS AND OPPORTUNITIES OF MIGRATION IN THE AMERICAS
+          </div>
+          <div id="description"></div>
+        </div>
+        <Suspense fallback={"Loading..."}>
+          <DynamicMap chapter={chapter} />
+          <DynamicStoryImages chapter={chapter} />
+        </Suspense>
 
         <nav id="navigation">
           <div onClick={previousChapter}>BACK</div>

@@ -1,3 +1,20 @@
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 24em;
+  }
+}
+@keyframes blinkTextCursor {
+  from {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  to {
+    color: transparent;
+  }
+}
+
 html,
 body {
   padding: 0;
@@ -47,6 +64,74 @@ a {
 
 #deckgl-overlay {
   cursor: crosshair;
+}
+
+#narrativeContainer {
+  position: absolute;
+  /* border: 3px solid red; */
+  margin-top: 40vh;
+  margin-left: 5%;
+  width: 20%;
+  /* border: 1px solid white; */
+  /* height: 100vh; */
+}
+
+#narrativeContainer > * {
+  pointer-events: none;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+#narrativeText {
+  font-family: SpeziaWide;
+  font-size: 3.25rem;
+  line-height: 3.25rem;
+  color: white;
+  transition: 0.25s ease-in-out;
+}
+
+#narrativeImg {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  margin-top: 0;
+  margin-left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: 1.5s ease-in-out;
+  opacity: 1;
+}
+
+#flare {
+  font-family: SpeziaThin;
+  font-size: 3.25rem;
+  line-height: 3.25rem;
+  color: white;
+  animation: normal both, blinkTextCursor 500ms steps(44) infinite normal;
+}
+
+#subText {
+  font-family: SpeziaWide;
+  font-size: 1rem;
+  line-height: 1.4rem;
+  padding-top: 0.25rem;
+  padding-left: 0.125rem;
+  color: white;
+  transition: 0.25s ease-in-out;
+}
+
+#description {
+  font-family: SpeziaWide;
+  color: white;
+  transition: 0.25s ease-in-out;
 }
 
 @media (prefers-color-scheme: dark) {
