@@ -66,7 +66,7 @@ export default function Home() {
       <main className={styles.main}>
         <StoryText chapter={chapter} />
         <Suspense fallback={"Loading..."}>
-          <DynamicMap chapter={chapter} />
+          <DynamicMap chapter={chapter} setChapter={setChapter} />
           <DynamicStoryImages chapter={chapter} />
         </Suspense>
 

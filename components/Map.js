@@ -41,7 +41,7 @@ const tripsAnimationSpeed = 1.5;
 const TIME_WINDOW = 50; // 15 minutes
 const arcAnimationSpeed = 8;
 
-export default function Map({ chapter }) {
+export default function Map({ chapter, setChapter }) {
   const [viewState, setViewState] = useState({
     longitude: chapterData[0].longitude,
     latitude: chapterData[0].latitude,
@@ -98,6 +98,13 @@ export default function Map({ chapter }) {
       setIsPlaying(true);
     } else {
       setIsPlaying(false);
+    }
+
+    // trigger any auto transitions
+    if (chapterData[chapter].autoTransition != "") {
+      setTimeout(() => {
+        setChapter(chapter + 1);
+      }, chapterData[chapter].autoTransition);
     }
   }, [chapter]);
 
