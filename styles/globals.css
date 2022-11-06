@@ -1,3 +1,15 @@
+/* fonts */
+
+/* @font-face {
+  font-family: SpeziaWide;
+  src: url(/public/fonts/SpeziaWide-Bold.otf);
+}
+
+@font-face {
+  font-family: SpeziaThin;
+  src: url(/public/fonts/SpeziaCompleteUprightTrial.woff);
+} */
+
 @keyframes typewriter {
   from {
     width: 0;
@@ -67,11 +79,12 @@ a {
 }
 
 #narrativeContainer {
-  position: absolute;
-  /* border: 3px solid red; */
-  margin-top: 40vh;
+  position: fixed;
   margin-left: 5%;
   width: 20%;
+  z-index: 1;
+  place-self: start;
+
   /* border: 1px solid white; */
   /* height: 100vh; */
 }
