@@ -5,11 +5,12 @@ import { TripsLayer } from "@deck.gl/geo-layers";
 import { _GlobeView as GlobeView } from "@deck.gl/core";
 import { FlyToInterpolator } from "@deck.gl/core";
 import { PathStyleExtension } from "@deck.gl/extensions";
-
+import AnimatedArcLayer from "./animated-arc-layer";
 import chapterData from "../public/data/mapChapters.json";
+import animatedFlights from "../public/data/animatedFlights.json";
 
 // static variables
-let fadeTransDuration = 1500;
+let fadeTransDuration = 1500; //the fade duration in millaseconds for each layer
 
 const DATA_URL = {
   DATA: {
@@ -32,30 +33,13 @@ const DATA_URL = {
   },
 };
 
-// animation
+// trips animation
 const loopLength = 21000; // unit corresponds to the timestamp in source data
-const animationSpeed = 1.5;
+const tripsAnimationSpeed = 1.5;
 
-// get chapter of the first time a layer is visible on the map
-const layerAppearance = () => {
-  let layerOrder = {};
-  for (let i = 0; i < chapterData.length; i++) {
-    if (chapterData[i].layers) {
-      const layerKeys = Object.keys(chapterData[i].layers);
-      for (let j = 0; j < layerKeys.length; j++) {
-        if (
-          chapterData[i].layers[layerKeys[j]] == 1 &&
-          layerOrder[layerKeys[j]] == undefined
-        ) {
-          layerOrder[layerKeys[j]] = i;
-        }
-      }
-    }
-  }
-  return layerOrder;
-};
-
-const loadLayerOrder = layerAppearance();
+// arc animation
+const TIME_WINDOW = 50; // 15 minutes
+const arcAnimationSpeed = 8;
 
 export default function Map({ chapter }) {
   const [viewState, setViewState] = useState({
@@ -68,7 +52,7 @@ export default function Map({ chapter }) {
   const [time, setTime] = useState(0);
   const [animation] = useState({});
   const animate = () => {
-    setTime((t) => (t + animationSpeed) % loopLength);
+    setTime((t) => (t + tripsAnimationSpeed) % loopLength);
     animation.id = window.requestAnimationFrame(animate);
   };
 
@@ -78,13 +62,44 @@ export default function Map({ chapter }) {
   }, [animation]);
 
   //   hooks for animated arc layer
-  //   const [isPlaying, setIsPlaying] = useState(false);
-  //   const [currentTime, setCurrentTime] = useState(0);
-  //   const groups = useMemo(() => sliceData(data), [data]);
-  //   const endTime = useMemo(() => {
-  //     return groups.reduce((max, group) => Math.max(max, group.endTime), 0);
-  //   }, [groups]);
-  //   const timeRange = [currentTime, currentTime + TIME_WINDOW];
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const timeRange = [currentTime, currentTime + TIME_WINDOW];
+
+  //   animate the arc layer
+  useEffect(() => {
+    let arcAnimation;
+    if (isPlaying) {
+      arcAnimation = requestAnimationFrame(() => {
+        let nextValue = currentTime + arcAnimationSpeed;
+        setCurrentTime(nextValue);
+      });
+    }
+    if (!isPlaying && currentTime !== 0) {
+      //   reset = false;
+      setCurrentTime(0);
+    }
+    return () => arcAnimation && cancelAnimationFrame(arcAnimation);
+  });
+
+  // useEffect on chapter to update viewState
+  useEffect(() => {
+    // update camera
+    setViewState({
+      longitude: chapterData[chapter].longitude,
+      latitude: chapterData[chapter].latitude,
+      zoom: chapterData[chapter].zoom,
+      transitionDuration: chapterData[chapter].duration,
+      transitionInterpolator: new FlyToInterpolator(),
+    });
+
+    // trigger layers
+    if (chapterData[chapter].layers.AnimatedArcs == true) {
+      setIsPlaying(true);
+    } else {
+      setIsPlaying(false);
+    }
+  }, [chapter]);
 
   const layers = [
     new BitmapLayer({
@@ -248,6 +263,29 @@ export default function Map({ chapter }) {
         },
       },
     }),
+  ];
+
+  const animatedLayers = [
+    animatedFlights.map(
+      (group, index) =>
+        new AnimatedArcLayer({
+          id: `flights-${index}`,
+          data: group.flights,
+          getSourcePosition: (d) => {
+            return [d.lon2, d.lat2];
+          },
+          getTargetPosition: (d) => [d.lon1, d.lat1],
+          getSourceTimestamp: (d) => d.time1,
+          getTargetTimestamp: (d) => d.time2,
+          getTilt: (d) => d.tilt,
+          getHeight: (d) => d.randHeight,
+          getWidth: 1,
+          timeRange,
+          getTargetColor: [215, 215, 0, [25]],
+          getSourceColor: [215, 215, 0, [25]],
+          opacity: chapterData[chapter].layers.AnimatedArcs,
+        })
+    ),
     new TripsLayer({
       id: "Trips",
       data: DATA_URL.DATA.TRIPS,
@@ -277,41 +315,11 @@ export default function Map({ chapter }) {
     }),
   ];
 
-  //   const dataLayers = groups.map(
-  //     (group, index) =>
-  //       new AnimatedArcLayer({
-  //         id: `flights-${index}`,
-  //         data: group.flights,
-  //         getSourcePosition: (d) => [d.lon2, d.lat2],
-  //         getTargetPosition: (d) => [d.lon1, d.lat1],
-  //         getSourceTimestamp: (d) => d.time1,
-  //         getTargetTimestamp: (d) => d.time2,
-  //         getTilt: (d) => d.tilt,
-  //         getHeight: (d) => d.randHeight,
-  //         getWidth: 1,
-  //         timeRange,
-  //         getTargetColor: [215, 215, 0, [25]],
-  //         getSourceColor: [215, 215, 0, [25]],
-  //         opacity: chapterData[counter].AnimatedArcs,
-  //       })
-  //   );
-
-  // useEffect on chapter to update viewState
-  useEffect(() => {
-    setViewState({
-      longitude: chapterData[chapter].longitude,
-      latitude: chapterData[chapter].latitude,
-      zoom: chapterData[chapter].zoom,
-      transitionDuration: chapterData[chapter].duration,
-      transitionInterpolator: new FlyToInterpolator(),
-    });
-  }, [chapter]);
-
   return (
     <DeckGL
       initialViewState={viewState}
       controller={true}
-      layers={[layers]} //dataLayers
+      layers={[layers, animatedLayers]}
       views={new GlobeView()}
     />
   );

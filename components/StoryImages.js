@@ -3,14 +3,15 @@ import Image from "next/image";
 
 export default function StoryImages({ chapter }) {
   return (
-    <div className="story-image-container">
+    <div
+      className="story-image-container"
+      style={{ opacity: chapterData[chapter].imageUrl != "" ? 1 : 0 }}
+    >
       {chapterData[chapter].imageUrl !== "" && (
         <Image
           src={`/img/story/${chapterData[chapter].imageUrl}`}
           alt="Picture of the author"
           fill={true}
-          //   width={window.innerWidth}
-          //   height={window.innerHeight}
         />
       )}
     </div>

@@ -1,5 +1,4 @@
 import Typewriter from "typewriter-effect";
-
 import { useState, useEffect } from "react";
 
 export default function StoryText({ chapter }) {

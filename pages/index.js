@@ -1,15 +1,10 @@
 import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
-
 import { useState } from "react";
-// import Map from "../components/Map";
-
 import chapterData from "../public/data/mapChapters.json";
 import { useEffect } from "react";
-
 import StoryText from "../components/StoryText";
 
 const DynamicMap = dynamic(() => import("../components/Map"), {
@@ -19,13 +14,26 @@ const DynamicStoryImages = dynamic(() => import("../components/StoryImages"), {
   suspense: true,
 });
 
+// getInitialProps({ ctx }) {
+//   let isMobileView = (ctx.req
+//     ? ctx.req.headers['user-agent']
+//     : navigator.userAgent).match(
+//       /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
+//     )
+
+//     //Returning the isMobileView as a prop to the component for further use.
+//     return {
+//       isMobileView: Boolean(isMobileView)
+//     }
+// }
+
 export default function Home() {
   const [chapter, setChapter] = useState(0);
 
   // console log chapter on useEffect
-  useEffect(() => {
-    console.log(chapter);
-  }, [chapter]);
+  // useEffect(() => {
+  //   console.log(chapter);
+  // }, [chapter]);
 
   // create a function to add +1 to chapter on click
   const nextChapter = () => {
