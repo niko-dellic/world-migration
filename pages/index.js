@@ -30,11 +30,6 @@ const DynamicStoryImages = dynamic(() => import("../components/StoryImages"), {
 export default function Home() {
   const [chapter, setChapter] = useState(0);
 
-  // console log chapter on useEffect
-  // useEffect(() => {
-  //   console.log(chapter);
-  // }, [chapter]);
-
   // create a function to add +1 to chapter on click
   const nextChapter = () => {
     if (chapter < chapterData.length - 1) {
