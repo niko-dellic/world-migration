@@ -123,14 +123,6 @@ a {
   opacity: 1;
 }
 
-#flare {
-  font-family: SpeziaThin;
-  font-size: 3.25rem;
-  line-height: 3.25rem;
-  color: white;
-  animation: normal both, blinkTextCursor 500ms steps(44) infinite normal;
-}
-
 #subText {
   font-family: SpeziaWide;
   font-size: 1rem;
@@ -145,6 +137,28 @@ a {
   font-family: SpeziaWide;
   color: white;
   transition: 0.25s ease-in-out;
+}
+
+#background-halo {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 100vw;
+  /* place-items: center; */
+  justify-items: center;
+  transition: 0.5s ease-in-out;
+}
+
+#background-halo > * {
+  width: 35vw;
+  height: 35vw;
+
+  /* background: radial-gradient(#e66465, #9198e5); */
+  /* background: radial-gradient(#000000, #e66465); */
+  background: radial-gradient(#000000, #9198e5);
+  border-radius: 100vw;
+  filter: blur(3rem);
+  transform: scale(2);
 }
 
 @media (prefers-color-scheme: dark) {

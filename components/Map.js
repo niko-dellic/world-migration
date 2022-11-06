@@ -371,12 +371,17 @@ export default function Map({ chapter, setChapter }) {
   ];
 
   return (
-    <DeckGL
-      initialViewState={viewState}
-      controller={true}
-      layers={[layers, animatedLayers]}
-      views={new GlobeView()}
-      effects={[postProcessEffect]}
-    />
+    <>
+      <div id="background-halo" style={{ opacity: chapter == 0 ? 1 : 0 }}>
+        <div />
+      </div>
+      <DeckGL
+        initialViewState={viewState}
+        controller={true}
+        layers={[layers, animatedLayers]}
+        views={new GlobeView()}
+        effects={[postProcessEffect]}
+      />
+    </>
   );
 }
