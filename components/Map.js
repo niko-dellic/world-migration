@@ -114,11 +114,13 @@ export default function Map({ chapter, setChapter }) {
       setIsPlaying(false);
     }
 
-    // trigger any auto transitions
+    // clear and trigger any auto transitions
     if (chapterData[chapter].autoTransition != "") {
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         setChapter(chapter + 1);
       }, chapterData[chapter].autoTransition);
+
+      return () => clearTimeout(timeoutId);
     }
   }, [chapter]);
 
@@ -296,7 +298,13 @@ export default function Map({ chapter, setChapter }) {
 
       pickable: false,
       getPosition: (d) => [d.x, d.y],
-      getText: (d) => (d.Acum_Cost_ !== 0 ? d.Accum_cost : null),
+      getText: (d, index) => {
+        if (d.Acum_Cost_ == 0) {
+          return;
+        }
+
+        return `${d.Accum_cost} ${". . . . . . . . . . ".repeat(1)}`;
+      },
       getSize: 15,
 
       getColor: [255, 255, 255],
