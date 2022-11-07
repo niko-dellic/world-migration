@@ -142,7 +142,6 @@ export default function Map({ chapter, setChapter }) {
         },
       },
     }),
-
     // new GeoJsonLayer({
     //   id: "wordMap",
     //   data: DATA_URL.DATA.WORLDMAP,

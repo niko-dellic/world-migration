@@ -18,5 +18,8 @@
     "react-dom": "18.2.0",
     "react-map-gl": "^7.0.19",
     "typewriter-effect": "^2.19.0"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^6.5.1"
   }
 }

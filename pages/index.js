@@ -6,6 +6,7 @@ import { useState } from "react";
 import chapterData from "../public/data/mapChapters.json";
 import { useEffect } from "react";
 import StoryText from "../components/StoryText";
+// import AnimatedArrows from "../components/AnimatedArrows";
 
 const DynamicMap = dynamic(() => import("../components/Map"), {
   suspense: true,
@@ -64,10 +65,11 @@ export default function Home() {
           <DynamicMap chapter={chapter} setChapter={setChapter} />
           <DynamicStoryImages chapter={chapter} />
         </Suspense>
+        {/* <AnimatedArrows chapter={chapter} /> */}
 
         <nav id="navigation">
-          <div onClick={previousChapter}>BACK</div>
-          <div onClick={nextChapter}>NEXT</div>
+          <div onClick={previousChapter}>◀ BACK</div>
+          <div onClick={nextChapter}>NEXT ▶</div>
         </nav>
       </main>
     </div>
