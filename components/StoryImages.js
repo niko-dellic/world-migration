@@ -1,10 +1,9 @@
 import chapterData from "../public/data/mapChapters.json";
 import Image from "next/image";
 
-// import multiple svgs from "../public/svg/narrative/mapOverlay/"
-// import DarienCAD from "../public/svg/mapOverlay/darienCAD.svg";
-// import PanamaCAD from "../public/svg/mapOverlay/PanamaCAD.svg";
-// import GuatMexCAD from "../public/svg/mapOverlay/GuatMexCAD.svg";
+import DarienCAD from "../public/svg/mapOverlay/darienCAD.svg";
+import PanamaCAD from "../public/svg/mapOverlay/panamaCAD.svg";
+import GuatMexCAD from "../public/svg/mapOverlay/guatMexCAD.svg";
 
 // import svg narrative
 import Text1 from "../public/svg/narrativeText/01.svg";
@@ -42,7 +41,7 @@ export default function StoryImages({ chapter }) {
       {chapterData[chapter].svgOverlay == "Text6" && <Text6 />}
       {chapterData[chapter].svgOverlay == "Text7" && <Text7 />}
       {chapterData[chapter].svgOverlay == "Text8" && <Text8 />}
-      {/* {chapterData[chapter].svgOverlay == "darienCAD" && (
+      {chapterData[chapter].svgOverlay == "darienCAD" && (
         <DarienCAD style={svgStyle} />
       )}
       {chapterData[chapter].svgOverlay == "panamaCAD" && (
@@ -50,7 +49,7 @@ export default function StoryImages({ chapter }) {
       )}
       {chapterData[chapter].svgOverlay == "guatMexCAD" && (
         <GuatMexCAD style={svgStyle} />
-      )} */}
+      )}
       {chapterData[chapter].imageUrl !== "" && (
         <Image
           src={`/img/story/${chapterData[chapter].imageUrl}`}

@@ -65,6 +65,7 @@ export default function Map({ chapter, setChapter }) {
   // hooks for trips layer
   const [time, setTime] = useState(0);
   const [animation] = useState({});
+
   const animate = () => {
     setTime((t) => (t + tripsAnimationSpeed) % loopLength);
     animation.id = window.requestAnimationFrame(animate);
